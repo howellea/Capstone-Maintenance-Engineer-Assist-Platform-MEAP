@@ -1,3 +1,82 @@
 [
-    
+    {
+        "equipmentId": "Pump-101",
+        "timestamp": "2025-03-31T10:00:00Z",
+        "averageTemperature": 85.3,
+        "averageFlowRate": 245.8,
+        "averageVibration": 0.32,
+        "motorStatus": true
+    },
+    {
+        "equipmentId": "Pump-101",
+        "timestamp": "2025-03-31T10:10:00Z",
+        "averageTemperature": 86.1,
+        "averageFlowRate": 250.2,
+        "averageVibration": 0.28,
+        "motorStatus": true
+    },
+    {
+        "equipmentId": "Pump-101",
+        "timestamp": "2025-03-31T10:20:00Z",
+        "averageTemperature": 87.0,
+        "averageFlowRate": 248.0,
+        "averageVibration": 0.31,
+        "motorStatus": true
+    },
+    {
+        "equipmentId": "Pump-101",
+        "timestamp": "2025-03-31T10:30:00Z",
+        "averageTemperature": 84.9,
+        "averageFlowRate": 240.4,
+        "averageVibration": 0.34,
+        "motorStatus": false
+    },
+    {
+        "equipmentId": "Pump-101",
+        "timestamp": "2025-03-31T10:40:00Z",
+        "averageTemperature": 85.6,
+        "averageFlowRate": 247.9,
+        "averageVibration": 0.35,
+        "motorStatus": true
+    },
+    {
+        "equipmentId": "Pump-101",
+        "timestamp": "2025-03-31T10:50:00Z",
+        "averageTemperature": 86.3,
+        "averageFlowRate": 251.3,
+        "averageVibration": 0.27,
+        "motorStatus": true
+    },
+    {
+        "equipmentId": "Pump-101",
+        "timestamp": "2025-03-31T11:00:00Z",
+        "averageTemperature": 87.5,
+        "averageFlowRate": 255.1,
+        "averageVibration": 0.29,
+        "motorStatus": true
+    },
+    {
+        "equipmentId": "Pump-101",
+        "timestamp": "2025-03-31T11:10:00Z",
+        "averageTemperature": 88.0,
+        "averageFlowRate": 252.4,
+        "averageVibration": 0.33,
+        "motorStatus": true
+    },
+    {
+        "equipmentId": "Pump-101",
+        "timestamp": "2025-03-31T11:20:00Z",
+        "averageTemperature": 86.7,
+        "averageFlowRate": 249.7,
+        "averageVibration": 0.30,
+        "motorStatus": true
+    },
+    {
+        "equipmentId": "Pump-101",
+        "timestamp": "2025-03-31T11:30:00Z",
+        "averageTemperature": 85.1,
+        "averageFlowRate": 246.2,
+        "averageVibration": 0.31,
+        "motorStatus": false
+    }
 ]
