@@ -18,7 +18,7 @@ const cleanDB = async (): Promise<void> => {
     await EquipmentProfile.deleteMany({});
     console.log('EquipmentProfile collection cleaned.');
 
-    process.exit(0); // Exit cleanly after success
+    // process.exit(0); // Exit cleanly after success
   } catch (err) {
     console.error('Error cleaning collections:', err);
     process.exit(1);
