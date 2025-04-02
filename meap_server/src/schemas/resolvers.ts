@@ -1,5 +1,5 @@
 import { User, HistoricalReading, LiveReading, EquipmentProfile, EquipmentFault } from '../models/index.js';
-import { signToken, AuthenticationError } from '../utils/auth.js'; 
+import { signToken, AuthenticationError } from '../utils/auth.js';
 
 // ─── Argument Interfaces ────────────────────────────────────────────────
 
@@ -8,6 +8,7 @@ interface AddUserArgs {
     username: string;
     email: string;
     password: string;
+    role: 'engineer' | 'technician';
   };
 }
 
@@ -75,16 +76,18 @@ const resolvers = {
   Mutation: {
     addUser: async (_parent: any, { input }: AddUserArgs) => {
       const user = await User.create({ ...input });
-      const token = signToken(user.username, user.email, user._id);
+      const token = signToken(user.username, user.email, user._id, user.role);
       return { token, user };
     },
 
     login: async (_parent: any, { email, password }: LoginUserArgs) => {
       const user = await User.findOne({ email });
       if (!user) throw new AuthenticationError('Could not authenticate user.');
+
       const correctPw = await user.isCorrectPassword(password);
       if (!correctPw) throw new AuthenticationError('Could not authenticate user.');
-      const token = signToken(user.username, user.email, user._id);
+
+      const token = signToken(user.username, user.email, user._id, user.role);
       return { token, user };
     },
 
