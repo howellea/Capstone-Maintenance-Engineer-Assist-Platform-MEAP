@@ -11,11 +11,12 @@ const Signup = () => {
     username: '',
     email: '',
     password: '',
+    role: '', // Add role
   });
 
   const [addUser, { loading, error, data }] = useMutation(ADD_USER);
 
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
+  const handleChange = (event: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = event.target;
     setFormState({ ...formState, [name]: value });
   };
@@ -23,8 +24,8 @@ const Signup = () => {
   const handleFormSubmit = async (event: FormEvent) => {
     event.preventDefault();
 
-    if (!formState.username || !formState.email || !formState.password) {
-      alert('Please fill in all fields.');
+    if (!formState.username || !formState.email || !formState.password || !formState.role) {
+      alert('Please fill in all fields including your role.');
       return;
     }
 
@@ -34,7 +35,7 @@ const Signup = () => {
       });
 
       Auth.login(data.addUser.token);
-      navigate('/dashboard'); // 🚀 Send user to dashboard
+      navigate('/dashboard');
     } catch (e) {
       console.error(e);
     }
@@ -48,8 +49,7 @@ const Signup = () => {
           <div className="card-body">
             {data ? (
               <p>
-                Success! Redirecting to your{' '}
-                <strong>Dashboard</strong>...
+                Success! Redirecting to your <strong>Dashboard</strong>...
               </p>
             ) : (
               <form onSubmit={handleFormSubmit}>
@@ -77,6 +77,19 @@ const Signup = () => {
                   value={formState.password}
                   onChange={handleChange}
                 />
+                {/*  Role Selection */}
+                <select
+                  className="form-input"
+                  name="role"
+                  value={formState.role}
+                  onChange={handleChange}
+                  required
+                >
+                  <option value="">Select Role</option>
+                  <option value="engineer">Engineer</option>
+                  <option value="technician">Technician</option>
+                </select>
+
                 <button
                   className="btn btn-block btn-primary"
                   style={{ cursor: 'pointer' }}
