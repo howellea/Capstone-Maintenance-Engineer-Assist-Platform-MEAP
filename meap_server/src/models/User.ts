@@ -1,16 +1,15 @@
 import { Schema, model, Document } from 'mongoose';
 import bcrypt from 'bcrypt';
 
-// Define an interface for the User document
 interface IUser extends Document {
   username: string;
   email: string;
   password: string;
+  role: 'engineer' | 'technician';
   thoughts: Schema.Types.ObjectId[];
   isCorrectPassword(password: string): Promise<boolean>;
 }
 
-// Define the schema for the User document
 const userSchema = new Schema<IUser>(
   {
     username: {
@@ -30,6 +29,12 @@ const userSchema = new Schema<IUser>(
       required: true,
       minlength: 5,
     },
+    role: {
+      type: String,
+      enum: ['engineer', 'technician'],
+      default: 'technician',
+      required: true,
+    },
   },
   {
     timestamps: true,
@@ -43,7 +48,6 @@ userSchema.pre<IUser>('save', async function (next) {
     const saltRounds = 10;
     this.password = await bcrypt.hash(this.password, saltRounds);
   }
-
   next();
 });
 
@@ -52,5 +56,4 @@ userSchema.methods.isCorrectPassword = async function (password: string): Promis
 };
 
 const User = model<IUser>('User', userSchema);
-
 export default User;
