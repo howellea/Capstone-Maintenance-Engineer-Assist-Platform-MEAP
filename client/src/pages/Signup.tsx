@@ -1,30 +1,32 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
-
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { ADD_USER } from '../utils/mutations';
-
 import Auth from '../utils/auth';
 
 const Signup = () => {
+  const navigate = useNavigate();
+
   const [formState, setFormState] = useState({
     username: '',
     email: '',
     password: '',
   });
-  const [addUser, { error, data }] = useMutation(ADD_USER);
+
+  const [addUser, { loading, error, data }] = useMutation(ADD_USER);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-
-    setFormState({
-      ...formState,
-      [name]: value,
-    });
+    setFormState({ ...formState, [name]: value });
   };
 
   const handleFormSubmit = async (event: FormEvent) => {
     event.preventDefault();
+
+    if (!formState.username || !formState.email || !formState.password) {
+      alert('Please fill in all fields.');
+      return;
+    }
 
     try {
       const { data } = await addUser({
@@ -32,6 +34,7 @@ const Signup = () => {
       });
 
       Auth.login(data.addUser.token);
+      navigate('/dashboard'); // 🚀 Send user to dashboard
     } catch (e) {
       console.error(e);
     }
@@ -45,8 +48,8 @@ const Signup = () => {
           <div className="card-body">
             {data ? (
               <p>
-                Success! You may now head{' '}
-                <Link to="/">back to the homepage.</Link>
+                Success! Redirecting to your{' '}
+                <strong>Dashboard</strong>...
               </p>
             ) : (
               <form onSubmit={handleFormSubmit}>
@@ -78,8 +81,9 @@ const Signup = () => {
                   className="btn btn-block btn-primary"
                   style={{ cursor: 'pointer' }}
                   type="submit"
+                  disabled={loading}
                 >
-                  Submit
+                  {loading ? 'Signing up...' : 'Submit'}
                 </button>
               </form>
             )}

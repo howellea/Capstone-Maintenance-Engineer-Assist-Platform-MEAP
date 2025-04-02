@@ -1,40 +1,40 @@
 import { useState, type FormEvent, type ChangeEvent } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useMutation } from '@apollo/client';
 import { LOGIN_USER } from '../utils/mutations';
-
 import Auth from '../utils/auth';
 
 const Login = () => {
+  const navigate = useNavigate();
+
   const [formState, setFormState] = useState({ email: '', password: '' });
-  const [login, { error, data }] = useMutation(LOGIN_USER);
+  const [login, { loading, error, data }] = useMutation(LOGIN_USER);
 
   const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-
-    setFormState({
-      ...formState,
-      [name]: value,
-    });
+    setFormState({ ...formState, [name]: value });
   };
 
   const handleFormSubmit = async (event: FormEvent) => {
     event.preventDefault();
-    console.log(formState);
+
+    if (!formState.email || !formState.password) {
+      alert('Please enter both email and password.');
+      return;
+    }
+
     try {
       const { data } = await login({
         variables: { ...formState },
       });
 
       Auth.login(data.login.token);
+      navigate('/dashboard'); // 🚀 Redirect to dashboard
     } catch (e) {
       console.error(e);
     }
 
-    setFormState({
-      email: '',
-      password: '',
-    });
+    setFormState({ email: '', password: '' });
   };
 
   return (
@@ -45,8 +45,8 @@ const Login = () => {
           <div className="card-body">
             {data ? (
               <p>
-                Success! You may now head{' '}
-                <Link to="/">back to the homepage.</Link>
+                Success! Redirecting to your{' '}
+                <strong>Dashboard</strong>...
               </p>
             ) : (
               <form onSubmit={handleFormSubmit}>
@@ -70,8 +70,9 @@ const Login = () => {
                   className="btn btn-block btn-primary"
                   style={{ cursor: 'pointer' }}
                   type="submit"
+                  disabled={loading}
                 >
-                  Submit
+                  {loading ? 'Logging in...' : 'Submit'}
                 </button>
               </form>
             )}
