@@ -5,6 +5,7 @@ const typeDefs = `
     _id: ID!
     username: String!
     email: String!
+    role: String!
   }
 
   type Auth {
@@ -55,6 +56,7 @@ const typeDefs = `
     username: String!
     email: String!
     password: String!
+    role: String!
   }
 
   input FaultInput {
