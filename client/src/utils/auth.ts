@@ -1,59 +1,53 @@
-import { type JwtPayload, jwtDecode } from 'jwt-decode';
+import { jwtDecode, type JwtPayload } from 'jwt-decode';
+import { UserData } from '../interfaces/UserData';
 
-// Extending the JwtPayload interface to include additional data fields specific to the application.
+// Define the shape of your decoded token, extending standard fields
 interface ExtendedJwt extends JwtPayload {
-  data:{
-    username:string,
-    email:string,
-    id:string
-  }
-};
+  data: UserData; //  Must match UserData interface (including role)
+}
 
 class AuthService {
-  // This method decodes the JWT token to get the user's profile information.
-  getProfile() {
-    // jwtDecode is used to decode the JWT token and return its payload.
-    return jwtDecode<ExtendedJwt>(this.getToken());
-  }
-
-  // This method checks if the user is logged in by verifying the presence and validity of the token.
-  loggedIn() {
+  // Decode token and return full profile (includes role)
+  getProfile(): UserData | null {
     const token = this.getToken();
-    // Returns true if the token exists and is not expired.
-    return !!token && !this.isTokenExpired(token);
-  }
+    if (!token) return null;
 
-  // This method checks if the provided token is expired.
-  isTokenExpired(token: string) {
     try {
-      // jwtDecode decodes the token to check its expiration date.
-      const decoded = jwtDecode<JwtPayload>(token);
-
-      // Returns true if the token has expired, false otherwise.
-      if (decoded?.exp && decoded?.exp < Date.now() / 1000) {
-        return true;
-      }
+      const decoded = jwtDecode<ExtendedJwt>(token);
+      return decoded.data;
     } catch (err) {
-      // If decoding fails, assume the token is not expired.
-      return false;
+      console.error('Failed to decode token:', err);
+      return null;
     }
   }
 
-  // This method retrieves the token from localStorage.
+  loggedIn(): boolean {
+    const token = this.getToken();
+    return !!token && !this.isTokenExpired(token);
+  }
+
+  isTokenExpired(token: string): boolean {
+    try {
+      const decoded = jwtDecode<JwtPayload>(token);
+      if (decoded?.exp && decoded.exp < Date.now() / 1000) {
+        return true;
+      }
+      return false;
+    } catch {
+      return true;
+    }
+  }
+
   getToken(): string {
-    const loggedUser = localStorage.getItem('id_token') || '';
-    // Returns the token stored in localStorage.
-    return loggedUser;
+    return localStorage.getItem('id_token') || '';
   }
 
-  // This method logs in the user by storing the token in localStorage and redirecting to the home page.
-  login(idToken: string) {
+  login(idToken: string): void {
     localStorage.setItem('id_token', idToken);
-    window.location.assign('/');
+    window.location.assign('/dashboard'); // Redirect after login
   }
 
-  // This method logs out the user by removing the token from localStorage and redirecting to the home page.
-  logout() {
+  logout(): void {
     localStorage.removeItem('id_token');
     window.location.assign('/');
   }
