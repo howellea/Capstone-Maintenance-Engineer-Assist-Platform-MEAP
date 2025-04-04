@@ -1,17 +1,13 @@
-Absolutely! Here's your complete `techDoc.md` with the **linked Table of Contents** and all sections cleanly organized:
-
----
-
 # Maintenance Engineer Assist Platform (MEAP)
 
 ## Overview
-The **Maintenance Engineer Assist Platform (MEAP)** is a role-aware full-stack application tailored for industrial environments to help maintenance engineers, technicians (electrical, instrumentation), and mechanics monitor, troubleshoot, and optimize equipment performance.
+The **Maintenance Engineer Assist Platform (MEAP)** is a role-aware full-stack application tailored for industrial environments. It supports maintenance engineers, electrical/instrumentation technicians, and mechanics in monitoring, troubleshooting, and optimizing equipment performance.
 
-The platform connects to a simulated OPC UA server for secure, real-time industrial data and supports historical analytics, equipment profile management, and fault logging/resolution workflows.
+The platform connects securely to a simulated OPC UA server to retrieve real-time industrial data. It also supports historical analytics, equipment profile management, and fault logging/resolution workflows.
 
 ---
 
-## 📑 Table of Contents
+## 📁 Table of Contents
 
 - [Overview](#overview)
 - [1. System Architecture](#1-system-architecture)
@@ -34,6 +30,10 @@ The platform connects to a simulated OPC UA server for secure, real-time industr
   - [5.2 Environments](#52-environments)
 - [6. Roadmap & Future Features](#6-roadmap--future-features)
 - [7. Credits](#7-credits)
+- [8. Decision Summary](#8-decision-summary)
+- [9. Edge Client Requirements (MacBook #1)](#9-edge-client-requirements-macbook-1)
+- [10. Cloud Infrastructure](#10-cloud-infrastructure)
+- [11. Next Steps](#11-next-steps)
 
 ---
 
@@ -69,33 +69,31 @@ Capstone-MEAP/
 ## 2. Core Features
 
 ### 2.1 Authentication & Roles
-- Users authenticate with email/password
-- JWTs issued upon login, stored in localStorage
-- Two roles supported: `engineer`, `technician`
-- Role-based UI rendering and access control
+- JWT authentication using email/password
+- Role-based access: `engineer`, `technician`
+- Role-specific dashboards and permissions
 
 ### 2.2 Dashboard
-- Welcome message based on user profile
+- Personalized welcome message
 - KPI cards:
   - MTBF (Mean Time Between Failures)
   - MTTR (Mean Time to Repair)
   - Uptime %
   - Open Work Orders
-- Equipment health and sensor data sections
+- Live sensor data and equipment health
 
 ### 2.3 Equipment Monitoring
-- **Live Readings**: Recent data from sensors (temp, flow, vibration, etc.)
-- **Historical Readings**: Trends over user-defined time ranges
+- Live readings from sensors (temperature, flow rate, vibration, etc.)
+- Historical readings over user-defined date ranges
 
 ### 2.4 Fault Logging
-- Engineers/Techs can submit fault reports
-- Faults tagged by type, severity, and notes
-- Faults can be resolved via UI
+- Submit fault reports with type, severity, and notes
+- View and resolve faults within the UI
+- Future logic: auto-log faults from anomalous sensor data
 
 ### 2.5 User Profile Page
-- View own stats or another user’s by username
-- Add/Edit profile info (in future update)
-- Change password (planned)
+- View stats for own or other users by username
+- Future updates: profile editing and password change
 
 ---
 
@@ -104,17 +102,17 @@ Capstone-MEAP/
 ### 3.1 Models
 - **User**: email, username, hashed password, role
 - **EquipmentProfile**: type, location, install date, tags
-- **LiveReading** / **HistoricalReading**: metrics + timestamps
+- **LiveReading / HistoricalReading**: metrics + timestamps
 - **EquipmentFault**: type, severity, notes, resolved flag
 
 ### 3.2 GraphQL API
-- **Queries:**
+- **Queries**:
   - `me`
   - `equipmentProfiles`
   - `liveReadings(equipmentId: String!)`
   - `historicalReadings(equipmentId: String!, from: String!, to: String!)`
   - `equipmentFaults(equipmentId: String!)`
-- **Mutations:**
+- **Mutations**:
   - `addUser(input: UserInput!)`
   - `login(email: String!, password: String!)`
   - `addEquipmentFault(input: FaultInput!)`
@@ -125,8 +123,8 @@ Capstone-MEAP/
 ## 4. Simulator Integration
 
 ### 4.1 Prosys OPC UA Simulation Server
-- Chosen for macOS compatibility and secure transport
-- Simulates equipment:
+- macOS-compatible and secure transport
+- Simulated equipment includes:
   - Pump
   - Conveyor
   - Checkweigher
@@ -134,11 +132,10 @@ Capstone-MEAP/
   - Robotic Palletizer
 
 ### 4.2 Integration Strategy
-- Use `node-opcua` to connect to `opc.tcp://localhost:53530/OPCUA/SimulationServer`
-- Read selected tag values (temperature, motorStatus, flowRate, vibration)
-- Save data to MongoDB as live readings using Mongoose
-- Use a scheduled polling loop (e.g., every 5 seconds)
-- Optional future logic to auto-log faults from abnormal readings
+- Node.js `node-opcua` connects to `opc.tcp://localhost:53530/OPCUA/SimulationServer`
+- Reads tag values like temperature, motorStatus, flowRate, vibration
+- Stores readings in MongoDB using Mongoose
+- Runs polling loop every 5 seconds
 
 ---
 
@@ -146,37 +143,97 @@ Capstone-MEAP/
 
 ### 5.1 Scripts
 ```bash
-npm run install         # Installs server and client deps
-npm run start:dev       # Dev mode (server + client concurrently)
-npm run build           # Full build
+npm run install         # Install dependencies
+npm run start:dev       # Start dev mode
+npm run build           # Build the project
 npm run seed            # Seed DB with test data
 ```
 
 ### 5.2 Environments
-- `.env` file used for storing:
+- `.env` holds:
   - MongoDB connection string (Atlas)
-  - JWT secret keys
-- Render (or Railway) used for backend hosting
-- MongoDB Atlas with IP allow-listing for simulator security
+  - JWT secrets
+- Hosting:
+  - Backend: Render
+  - Frontend: Render or Netlify
+  - Database: MongoDB Atlas (IP allow-list enabled)
 
 ---
 
 ## 6. Roadmap & Future Features
 - Real-time WebSocket integration
-- Equipment health scores
-- Predictive fault alerts
-- User avatars and profile editing
-- Upload equipment images or documents
-- Maintenance logs and work order tracking
+- Equipment health scoring
+- Predictive fault detection
+- Avatar/profile image upload
+- Equipment documentation and images
+- Work order and maintenance log tracking
 - Notification system (email/SMS)
-- Export readings to CSV/PDF
+- Export data to CSV/PDF
 
 ---
 
 ## 7. Credits
 - Created by **Eddy Howell** for **Capstone Bootcamp (2025)**
-- Simulated using [Prosys OPC UA Simulation Server](https://www.prosysopc.com)
+- GitHub: [howellea](https://github.com/howellea)
+- Repository: [MEAP](https://github.com/howellea/MEAP)
+- Tools:
+  - [Prosys OPC UA](https://www.prosysopc.com/products/opc-ua-simulation-server/)
+  - [Node-OPCUA](https://github.com/node-opcua/node-opcua)
+  - [MongoDB Atlas](https://www.mongodb.com/cloud/atlas)
+  - [Render](https://render.com)
 
 ---
 
-Let me know if you’d like to add diagrams, screenshots, or API response examples next!
+## 8. Decision Summary
+- **MacBook #1** acts as the **edge client**, hosting the OPC UA simulator and client
+- Client reads data and sends it to **MongoDB Atlas**
+- Backend and frontend hosted separately via Render
+
+---
+
+## 9. Edge Client Requirements (MacBook #1)
+
+### Software & Tools:
+1. Node.js installed
+2. Folder: `opcua-edge-client/`
+   - Contains:
+     - `index.ts` (main script)
+     - `services/opcClient.ts` (OPC UA logic)
+     - `config/db.ts` (MongoDB connection)
+     - `models/Reading.ts`
+     - `.env` with `MONGO_URI`
+3. MongoDB Atlas cluster created
+   - IP allow-listed
+4. Prosys OPC UA Server running
+5. Launch polling loop:
+```bash
+cd ~/path/to/opcua-edge-client
+node dist/index.js  # or ts-node src/index.ts
+```
+6. Testing:
+   - Console shows readings
+   - MongoDB receives new entries
+
+---
+
+## 10. Cloud Infrastructure
+
+### Backend (Render):
+- Folder: `meap_server/`
+- Apollo GraphQL handles auth and data access
+- Secure `.env` file with DB and JWT settings
+
+### Frontend (Render or Netlify):
+- Folder: `client/`
+- Built with React + Vite + TypeScript
+- Deployed as static site with public access
+
+---
+
+## 11. Next Steps
+- [ ] Finalize `opcua-edge-client/` repo structure
+- [ ] Confirm `.env` and DB access
+- [ ] Build and launch `index.ts`
+- [ ] Verify MongoDB receives data
+- [ ] Log in to MEAP app and view readings
+

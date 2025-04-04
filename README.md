@@ -1,7 +1,3 @@
-Perfect! Here’s the updated `README.md` with a link to your `techDoc.md` file, assuming it lives in the root directory of the project:
-
----
-
 # MEAP
 
 **Maintenance Engineer Assist Platform (MEAP)**  
@@ -10,7 +6,7 @@ Simulated Industrial Monitoring Dashboard for Smart Maintenance Teams
 Useful links:  
 - **Live App**: _coming soon_  
 - **GitHub Repo**: [MEAP Capstone](https://github.com/howellea/MEAP)  
-- **📄 Technical Documentation**: [techDoc.md](./techDoc.md)
+- **📄 Technical Documentation**: [techDoc.md](../../Documents/techDoc.md)
 
 ---
 
@@ -110,3 +106,4 @@ If you’d like to discuss MEAP, OPC UA, or industrial dashboards:
 - Email: [howelleddy@gmail.com](mailto:howelleddy@gmail.com)
 
 ---
+
