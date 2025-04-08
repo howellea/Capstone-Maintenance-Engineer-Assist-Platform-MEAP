@@ -1,9 +1,15 @@
 import { useQuery } from '@apollo/client';
-import { QUERY_ME } from '../utils/queries';
+import { QUERY_ME, QUERY_LIVE_READINGS } from '../utils/queries';
 
 const Dashboard = () => {
-  const { loading, data } = useQuery(QUERY_ME);
-  const user = data?.me;
+  const { loading: loadingUser, data: userData } = useQuery(QUERY_ME);
+  const user = userData?.me;
+
+  const { loading: loadingReadings, data: readingsData } = useQuery(QUERY_LIVE_READINGS, {
+    variables: { equipmentId: 'Pump-101' },
+  });
+
+  const readings = readingsData?.liveReadings || [];
 
   return (
     <main className="p-4">
@@ -11,7 +17,7 @@ const Dashboard = () => {
         Welcome, {user?.username || 'Maintenance Team Member'}!
       </h1>
 
-      {loading ? (
+      {(loadingUser || loadingReadings) ? (
         <div>Loading dashboard...</div>
       ) : (
         <>
@@ -23,10 +29,31 @@ const Dashboard = () => {
             <div className="border rounded p-4 shadow">Open Work Orders: --</div>
           </div>
 
-          {/* Equipment Status Placeholder */}
-          <h2 className="text-xl font-semibold mb-2">Equipment Status</h2>
-          <div className="border rounded p-4 shadow">
-            Coming soon: real-time equipment status table.
+          {/* Equipment Status Table */}
+          <h2 className="text-xl font-semibold mb-2">Equipment Status: Pump-101</h2>
+          <div className="border rounded p-4 shadow overflow-x-auto">
+            <table className="table-auto w-full text-sm">
+              <thead>
+                <tr>
+                  <th className="px-2 py-1">Timestamp</th>
+                  <th className="px-2 py-1">Temp (°C)</th>
+                  <th className="px-2 py-1">Flow Rate</th>
+                  <th className="px-2 py-1">Vibration</th>
+                  <th className="px-2 py-1">Motor Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                {readings.map((r: any) => (
+                  <tr key={r._id}>
+                    <td className="px-2 py-1">{new Date(Number(r.timestamp)).toLocaleString()}</td>
+                    <td className="px-2 py-1">{r.temperature ?? '--'}</td>
+                    <td className="px-2 py-1">{r.flowRate ?? '--'}</td>
+                    <td className="px-2 py-1">{r.vibration ?? '--'}</td>
+                    <td className="px-2 py-1">{r.motorStatus ? 'Running' : 'Stopped'}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </>
       )}
@@ -35,4 +62,3 @@ const Dashboard = () => {
 };
 
 export default Dashboard;
-

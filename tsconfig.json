@@ -30,7 +30,12 @@
     "useUnknownInCatchVariables": true,
 
     /* Module Extras */
-    "resolveJsonModule": true
-  },
-  "include": ["src"]
-}
+  
+      "compilerOptions": {
+        "rootDir": "./client/src",
+        "outDir": "./client/dist",
+      },
+
+      "include": ["client/src"],
+      },
+ }

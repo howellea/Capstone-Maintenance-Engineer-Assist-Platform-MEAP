@@ -1,14 +1,26 @@
 import { gql } from '@apollo/client';
 
 export const QUERY_ME = gql`
-  query me {
+  query Me {
     me {
       _id
       username
       email
+      role
     }
   }
 `;
 
-// Placeholder for MEAP-related queries
-// e.g., export const QUERY_EQUIPMENT_STATUS = gql`...`;
+
+export const QUERY_LIVE_READINGS = gql`
+  query GetLiveReadings($equipmentId: String!) {
+    liveReadings(equipmentId: $equipmentId) {
+      _id
+      timestamp
+      temperature
+      flowRate
+      vibration
+      motorStatus
+    }
+  }
+`;
