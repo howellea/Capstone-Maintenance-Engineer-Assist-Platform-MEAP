@@ -1,3 +1,4 @@
+
 import { User, HistoricalReading, LiveReading, EquipmentProfile, EquipmentFault } from '../models/index.js';
 import { signToken, AuthenticationError } from '../utils/auth.js';
 
@@ -55,7 +56,19 @@ const resolvers = {
     },
 
     liveReadings: async (_parent: any, { equipmentId }: EquipmentIdArgs) => {
-      return LiveReading.find({ equipmentId }).sort({ timestamp: -1 }).limit(20);
+      const rawReadings = await LiveReading.find({ equipmentId })
+        .sort({ timestamp: -1 })
+        .limit(20);
+
+      return rawReadings.map(reading => ({
+        _id: reading._id,
+        equipmentId: reading.equipmentId,
+        timestamp: reading.timestamp,
+        temperature: reading.tags?.temperature ?? null,
+        flowRate: reading.tags?.flowRate ?? null,
+        vibration: reading.tags?.vibration ?? null,
+        motorStatus: reading.tags?.motorStatus ?? null,
+      }));
     },
 
     historicalReadings: async (_parent: any, { equipmentId, from, to }: TimeRangeArgs) => {

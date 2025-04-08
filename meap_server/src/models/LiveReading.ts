@@ -1,28 +1,31 @@
-import { Schema, model, Document } from 'mongoose';
+import mongoose, { Document, Schema } from 'mongoose';
 
 export interface ILiveReading extends Document {
   equipmentId: string;
   timestamp: Date;
-  temperature: number;
-  flowRate: number;
-  vibration: number;
-  motorStatus: boolean;
+  tags: {
+    temperature?: number;
+    flowRate?: number;
+    motorStatus?: boolean;
+    vibration?: number;
+  };
 }
 
 const liveSchema = new Schema<ILiveReading>(
   {
     equipmentId: { type: String, required: true },
     timestamp: { type: Date, required: true },
-    temperature: { type: Number, required: true },
-    flowRate: { type: Number, required: true },
-    vibration: { type: Number, required: true },
-    motorStatus: { type: Boolean, required: true },
+    tags: {
+      temperature: Number,
+      flowRate: Number,
+      motorStatus: Boolean,
+      vibration: Number,
+    },
   },
   {
     timestamps: true,
   }
 );
 
-const LiveReading = model<ILiveReading>('LiveReading', liveSchema);
-
+const LiveReading = mongoose.model<ILiveReading>('LiveReading', liveSchema);
 export default LiveReading;

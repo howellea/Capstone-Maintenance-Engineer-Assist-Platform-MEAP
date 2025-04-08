@@ -14,14 +14,14 @@ const typeDefs = `
   }
 
   type LiveReading {
-    _id: ID!
-    equipmentId: String!
-    timestamp: Date!
-    temperature: Float!
-    flowRate: Float!
-    vibration: Float!
-    motorStatus: Boolean!
-  }
+  _id: ID!
+  equipmentId: String!
+  timestamp: String!
+  temperature: Float
+  flowRate: Float
+  vibration: Float
+  motorStatus: Boolean
+}
 
   type HistoricalReading {
     _id: ID!
